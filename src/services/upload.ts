@@ -39,17 +39,27 @@ export class UploadService {
 
 
 	uploadFile(file, assessmentId, questionId) {
+		console.log("UploadFile: $$$$$$$$$$$");
 		const blobUri = `https://${this.accountName}.blob.core.windows.net`;
+		console.log("Blob service start: **********");
 		const blobService = upload.createBlobServiceWithSas(blobUri, this.sas);
+		console.log("Blob service end: **********");
 
+		console.log("Blob service Create start: **********");
 		blobService.createBlockBlobFromBrowserFile('test', file.name, file,
 		(error, result) => {
-				 if (error) {	console.error(error); }
+			console.log("Blob service Create error: **********");
+			if (error) {	console.error(error); }
+				console.log("Blob service Create error: **********");
 				 else {
+					 console.log("Blob service should be a success");
 						var url = this.generateUrl(file.name);
 						this.createGQL(url, assessmentId, Number(questionId), file.name);
 				 }
 		});
+		console.log("Blob service Create end: **********");
+
+		console.log("End UploadFile: $$$$$$$$$$$");
 		return {name: file.name, questionId: questionId, url: this.generateUrl(file.name)};
 	}
 
